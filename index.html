@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Training Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header role="banner" class="modern-header">
+        <div class="header-gradient-bg"></div>
+        <div class="header-content-modern">
+            <div class="header-app-title">Chess Training Tracker</div>
+            <nav class="header-actions-modern" role="navigation" aria-label="Header actions">
+                <button id="profileBtn" class="icon-btn" title="Edit Profile" aria-label="Edit Profile" tabindex="0">
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                </button>
+                <button id="themeToggle" class="icon-btn" title="Toggle Theme" aria-label="Toggle Theme" tabindex="0">
+                    <i class="fas fa-moon" aria-hidden="true"></i>
+                </button>
+                <button id="shareProgressBtn" class="icon-btn" title="Share Progress" aria-label="Share Progress" tabindex="0">
+                    <i class="fas fa-share-alt" aria-hidden="true"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="mainContent" tabindex="-1">
+        <!-- User Banner Section -->
+        <section id="userBanner" class="banner" aria-labelledby="userBannerHeading">
+            <div class="welcome-message">
+                <h2 id="userBannerHeading">Welcome, <span id="userName">Player</span>!</h2>
+                <div class="rating-info">
+                    <p>Current Rating: <span id="currentRating">0</span></p>
+                    <p>Rating Goal: <span id="ratingGoal">0</span></p>
+                </div>
+            </div>
+            <div class="stats-badges">
+                <div class="streak" aria-label="Current streak">
+                    <i class="fas fa-fire" aria-hidden="true"></i>
+                    <span id="currentStreak">0</span> days
+                </div>
+                <div id="achievementBadges" class="badges" aria-label="Achievement badges">
+                    <!-- Achievement badges will be dynamically added here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Cards -->
+        <section id="dashboard" class="dashboard" aria-label="Dashboard statistics">
+            <div class="card" aria-label="Days Streak">
+                <h3>Days Streak</h3>
+                <p id="streakCount">0</p>
+            </div>
+            <div class="card" aria-label="Completion Rate">
+                <h3>Completion Rate</h3>
+                <p id="completionRate">0%</p>
+            </div>
+            <div class="card" aria-label="Hours Trained">
+                <h3>Hours Trained</h3>
+                <p id="hoursTrained">0h 0m</p>
+            </div>
+        </section>
+
+        <!-- Add Task Section -->
+        <section id="addTask" class="add-task" aria-labelledby="addTaskHeading">
+            <h2 id="addTaskHeading">Add New Task</h2>
+            <form id="taskForm" aria-label="Add Task Form">
+                <div class="form-group">
+                    <label for="taskName">Task Name:</label>
+                    <input type="text" id="taskName" required placeholder="e.g., Tactics Training" aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="taskDuration">Duration (minutes):</label>
+                    <input type="number" id="taskDuration" required min="1" placeholder="30" aria-required="true">
+                </div>
+                <button type="submit" class="btn primary" aria-label="Add Task">Add Task</button>
+            </form>
+        </section>
+
+        <!-- Tasks Section -->
+        <section id="tasks" class="tasks" aria-labelledby="tasksHeading">
+            <h2 id="tasksHeading">Current Tasks</h2>
+            <div id="taskListIncomplete" class="task-list" aria-label="Incomplete Tasks">
+                <!-- Incomplete tasks will be added here -->
+            </div>
+        </section>
+
+        <!-- Training Log Section -->
+        <section id="trainingLog" class="training-log" aria-labelledby="trainingLogHeading">
+            <h2 id="trainingLogHeading">Training Log</h2>
+            <div id="logEntries" class="log-entries" aria-label="Training Log Entries">
+                <!-- Log entries will be added here -->
+            </div>
+        </section>
+
+        <!-- Progress Chart Section -->
+        <section id="progressChartSection" class="progress-chart-section" aria-labelledby="progressChartHeading">
+            <h2 id="progressChartHeading">Progress Chart</h2>
+            <div class="chart-controls" aria-label="Chart Controls">
+                <label for="chartTypeSelect">Chart Type:
+                    <select id="chartTypeSelect" aria-label="Chart Type">
+                        <option value="bar">Bar</option>
+                        <option value="line">Line</option>
+                    </select>
+                </label>
+                <label for="chartRangeSelect">Time Range:
+                    <select id="chartRangeSelect" aria-label="Time Range">
+                        <option value="7">Last 7 Days</option>
+                        <option value="30">Last 30 Days</option>
+                    </select>
+                </label>
+                <label for="chartDataTypeSelect">Data:
+                    <select id="chartDataTypeSelect" aria-label="Data Type">
+                        <option value="minutes">Minutes Trained</option>
+                        <option value="tasks">Tasks Completed</option>
+                    </select>
+                </label>
+            </div>
+            <canvas id="progressChart" height="100" aria-label="Progress Chart" role="img"></canvas>
+            <div id="progressChartDesc" class="sr-only">Bar or line chart showing your training progress over the selected time range.</div>
+        </section>
+
+        <!-- Data Management Buttons -->
+        <section id="dataManagement" class="data-management" aria-label="Data Management">
+            <button id="exportDataBtn" class="btn export" aria-label="Export Data" tabindex="0"><i class="fas fa-file-export" aria-hidden="true"></i> Export Data</button>
+            <button id="importDataBtn" class="btn import" aria-label="Import Data" tabindex="0"><i class="fas fa-file-import" aria-hidden="true"></i> Import Data</button>
+            <input type="file" id="importFileInput" style="display:none" accept="application/json" aria-label="Import Data File">
+            <button id="resetPlanBtn" class="btn reset" aria-label="Reset Training Plan" tabindex="0"><i class="fas fa-sync-alt" aria-hidden="true"></i> Reset Training Plan</button>
+        </section>
+    </main>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-step" data-step="1">
+                <h3>Step 1: Your Name</h3>
+                <input type="text" id="profileName" placeholder="Enter your name">
+                <div class="modal-buttons">
+                    <button class="btn secondary cancel">Cancel</button>
+                    <button class="btn primary next">Next</button>
+                </div>
+            </div>
+            <div class="modal-step" data-step="2">
+                <h3>Step 2: Current Rating</h3>
+                <input type="number" id="profileRating" min="0" placeholder="Enter your current rating">
+                <div class="modal-buttons">
+                    <button class="btn secondary back">Back</button>
+                    <button class="btn primary next">Next</button>
+                </div>
+            </div>
+            <div class="modal-step" data-step="3">
+                <h3>Step 3: Rating Goal</h3>
+                <input type="number" id="profileGoal" min="0" placeholder="Enter your rating goal">
+                <div class="modal-buttons">
+                    <button class="btn secondary back">Back</button>
+                    <button class="btn primary save">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Progress Button -->
+    <button id="shareProgressBtn" class="btn share" aria-label="Share Progress" tabindex="0" style="margin: 1rem auto; display: block;">
+        <i class="fas fa-share-alt" aria-hidden="true"></i> Share Progress
+    </button>
+
+    <!-- Share Progress Modal -->
+    <div id="shareProgressModal" class="modal" aria-modal="true" role="dialog" aria-labelledby="shareProgressTitle" style="display:none;">
+        <div class="modal-content share-card-modal">
+            <button class="modal-close" id="closeShareModal" aria-label="Close Share Modal">&times;</button>
+            <h3 id="shareProgressTitle">Share Your Progress</h3>
+            <div id="shareCardPreview" class="share-card-preview">
+                <!-- Card content will be rendered here for html2canvas -->
+                <div id="shareCard" class="share-card" tabindex="0">
+                    <div class="share-card-header-fitness">
+                        <div class="share-card-header-main">
+                            <div class="share-card-website">chesstrainingtracker.com</div>
+                        </div>
+                        <div class="share-card-date-badge" id="shareCardDate"></div>
+                    </div>
+                    <div class="share-card-profile-fitness">
+                        <div class="share-card-profile-name" id="shareCardName">Name</div>
+                        <div class="share-card-profile-info">
+                            <span class="profile-rating"><span class="dot">&#x25CF;</span> Rating: <span id="shareCardRating">0</span></span>
+                            <span class="profile-goal"><span class="target">&#x1F441;</span> Goal: <span id="shareCardGoal">0</span></span>
+                        </div>
+                    </div>
+                    <div class="share-card-stats-row">
+                        <div class="stat-card">
+                            <div class="stat-icon">&#x26A1;</div>
+                            <div class="stat-value" id="shareCardStreak">0 days</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">&#x1F4CA;</div>
+                            <div class="stat-value" id="shareCardCompletion">0%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">&#x23F1;</div>
+                            <div class="stat-value" id="shareCardHours">0h 0m</div>
+                        </div>
+                    </div>
+                    <div class="share-card-section-label">Weekly Activity</div>
+                    <div class="share-card-chart-fitness" id="shareCardChart"></div>
+                </div>
+            </div>
+            <div class="share-modal-actions">
+                <button id="downloadShareCard" class="btn primary" aria-label="Download Progress Card">Download Image</button>
+                <button id="copyShareCard" class="btn secondary" aria-label="Copy Progress Card Image">Copy Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app-init.js"></script>
+    <script src="js/main_timer_new.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/logs-collapsible.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</body>
+</html> 
